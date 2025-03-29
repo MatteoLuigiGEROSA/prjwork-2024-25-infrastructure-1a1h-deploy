@@ -1,0 +1,1 @@
+# Spiegazione dettagliata del sistema JWT usato nella CommonRestApi

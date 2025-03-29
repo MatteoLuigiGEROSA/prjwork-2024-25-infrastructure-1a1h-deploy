@@ -1,0 +1,1 @@
+# Script di monitoring e health check (ping, curl, log watcher)

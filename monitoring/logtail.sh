@@ -1,0 +1,1 @@
+# Script per visualizzare i log centralizzati da tutti i container

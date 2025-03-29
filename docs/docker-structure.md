@@ -1,0 +1,1 @@
+# Dettagli e spiegazioni sulla struttura dei container e dei Dockerfile

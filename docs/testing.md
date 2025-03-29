@@ -1,0 +1,1 @@
+# Guida completa ai test manuali con Postman e futuri test automatici

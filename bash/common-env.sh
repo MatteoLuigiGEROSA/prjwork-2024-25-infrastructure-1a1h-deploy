@@ -1,0 +1,1 @@
+# Variabili d’ambiente comuni

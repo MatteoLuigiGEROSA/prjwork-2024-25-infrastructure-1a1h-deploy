@@ -1,0 +1,1 @@
+# Istruzioni per usare le collection Postman e test automatici futuri

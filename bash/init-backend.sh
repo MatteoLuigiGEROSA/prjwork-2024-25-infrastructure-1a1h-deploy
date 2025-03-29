@@ -1,0 +1,1 @@
+# Script per inizializzare il backend

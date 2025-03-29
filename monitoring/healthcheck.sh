@@ -1,0 +1,1 @@
+# Script bash per controllare lo stato di salute dei container
