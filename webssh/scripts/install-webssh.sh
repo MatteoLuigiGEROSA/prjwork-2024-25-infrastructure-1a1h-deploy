@@ -1,0 +1,1 @@
+# Script bash per installazione e setup WebSSH con virtualenv

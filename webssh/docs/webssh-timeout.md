@@ -1,0 +1,1 @@
+# Documentazione per configurazione timeout WebSSH e SSH server

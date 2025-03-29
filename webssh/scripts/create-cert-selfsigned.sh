@@ -1,0 +1,1 @@
+# Script per generare certificati SSL auto-firmati per WebSSH
