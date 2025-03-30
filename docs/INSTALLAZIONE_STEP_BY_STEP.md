@@ -60,6 +60,18 @@ Installa i pacchetti fondamentali per infrastruttura:
    - Volume `/creds` in sola lettura
 3. Builda e avvia il container Docker `commonrestapi`
 
+**📁 Attenzione:** la directory `creds/` non viene tracciata da Git (è ignorata da `.gitignore`)
+e viene **creata da Docker con owner `root`** se non già presente.
+
+### 🔧 Soluzione:
+
+Esegui sul server backend:
+
+```bash
+mkdir -p ~/backend/CommonRestApi/creds
+sudo chown -R $USER:$USER ~/backend/CommonRestApi/creds
+```
+
 ---
 
 ## 📂 Struttura volumi
