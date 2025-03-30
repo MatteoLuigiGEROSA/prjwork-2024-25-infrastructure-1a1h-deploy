@@ -65,9 +65,9 @@ EOF
 echo "Creo directory locale per i log se non esiste..."
 mkdir -p logs
 
-echo "Creo directory locale per le credenziali se non esiste..."
-mkdir -p creds
-sudo chown "$USER:$USER" creds
+# echo "Creo directory locale per le credenziali se non esiste..."
+# mkdir -p creds
+# sudo chown "$USER:$USER" creds
 
 echo "Avvio build e container Docker in background..."
 

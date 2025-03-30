@@ -37,5 +37,10 @@ pip install --upgrade pip
 pip install -r requirements.txt
 deactivate
 
+# Garantisce permessi corretti alle directory sensibili
+echo "Verifico permessi directory 'creds' e 'logs'..."
+mkdir -p creds logs
+sudo chown -R "$USER:$USER" creds logs
+
 echo "Backend pronto (non containerizzato)."
 
