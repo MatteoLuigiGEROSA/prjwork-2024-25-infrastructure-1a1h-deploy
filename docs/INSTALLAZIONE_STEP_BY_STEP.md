@@ -16,8 +16,8 @@ chmod +x a00-clone-infrastructure-deploy.sh
 ./a00-clone-infrastructure-deploy.sh
 ```
 
-📦 Clonerà il repository `https://github.com/MatteoLuigiGEROSA/prjwork-2024-25-infrastructure-1a1h-deploy.git`
-📁 Lo posizionerà in: `~/infrastructure-1a1h-deploy`
+📦 Clonerà il repository da GitHub nel path `~/infrastructure-1a1h-deploy`
+📁 La directory risultante sarà forzatamente: `~/infrastructure-1a1h-deploy`
 
 ---
 
