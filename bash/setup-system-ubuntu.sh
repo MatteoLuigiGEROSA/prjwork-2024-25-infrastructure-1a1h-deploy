@@ -1,1 +1,0 @@
-# Script per installare Docker, Git, ecc. su Ubuntu
