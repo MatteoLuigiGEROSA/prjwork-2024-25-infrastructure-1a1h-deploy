@@ -32,7 +32,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Comando default: avvia Gunicorn (WSGI server) sulla porta 8000
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app_controller:app"]
+
 EOF
 
 echo "Dockerfile creato con successo."
