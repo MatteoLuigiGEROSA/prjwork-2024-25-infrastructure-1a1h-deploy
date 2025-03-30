@@ -32,7 +32,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Comando default: avvia Gunicorn (WSGI server) sulla porta 8000
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app_controller:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "--access-logfile", "/logs/access.log", "--error-logfile", "/logs/gunicorn-error.log", "app_controller:app"]
 
 EOF
 
@@ -50,7 +50,8 @@ services:
     ports:
       - "8000:8000"  # Esponi la porta del container sulla stessa porta del sistema host
     volumes:
-      - ./logs:/app/logs   # Volume persistente per i log (host <-> container)
+      - ./logs:/logs             # La directory host "logs" viene mappata su "/logs" del container (volume persistente)
+      - ./creds:/creds:ro        # La directory host "creds" viene mappata su "/creds" del container (volume persistente, read-only)
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped

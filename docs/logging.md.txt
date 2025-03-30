@@ -1,0 +1,52 @@
+# Logging – CommonRestApi (Docker + Gunicorn)
+
+Questa sezione documenta la gestione dei log nel backend Flask containerizzato.
+
+## 📁 Posizione dei log nel container
+
+I log vengono scritti in due file distinti all'interno della directory `/logs` del container:
+
+- `/logs/access.log`
+  📘 Contiene tutte le richieste HTTP gestite da Gunicorn (es. `GET /api/... 200`)
+  - Formato standard access log HTTP
+  - Utile per debug API, auditing, statistiche
+
+- `/logs/gunicorn-error.log`
+  📕 Contiene errori runtime del server WSGI (Gunicorn) e della web-app Flask
+  - Eccezioni Python non gestite (`Traceback`)
+  - Errori di import, crash di worker Gunicorn
+  - Qualsiasi output su `stderr` (es. `print()` o `logging.error()`)
+
+## 🧱 Docker: mapping volumi
+
+Nel file `docker-compose.yml`, i log sono mappati su volumi locali in questo modo:
+
+```yaml
+volumes:
+  - ./logs:/logs
+```
+
+Questo consente di conservare i file log anche se il container viene distrutto/rigenerato.
+
+## 🛠️ Parametri Gunicorn
+
+Nel `Dockerfile`, la riga di avvio è:
+
+```dockerfile
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "--access-logfile", "/logs/access.log", "--error-logfile", "/logs/gunicorn-error.log", "app_controller:app"]
+```
+
+📌 I file log vengono scritti direttamente dal processo Gunicorn, senza dover modificare il codice Flask.
+
+## 🧪 Lettura log (host)
+
+Puoi leggere i log dall'esterno con:
+
+```bash
+cat ~/backend/CommonRestApi/logs/access.log
+cat ~/backend/CommonRestApi/logs/gunicorn-error.log
+```
+
+---
+
+✅ Questo approccio semplifica il debugging, l'auditing e la futura integrazione con sistemi di log centralizzati (es. ELK, Grafana Loki, ecc).
