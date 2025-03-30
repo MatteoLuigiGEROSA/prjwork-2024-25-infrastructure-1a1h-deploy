@@ -1,7 +1,7 @@
 # INSTALLAZIONE STEP-BY-STEP – INFRASTRUTTURA MRA-PAL
 
 Questa guida descrive passo-passo la procedura per preparare un server Ubuntu 24.04 LTS
-per ospitare il backend `CommonRestApi` su Docker + Gunicorn + Flask.
+per ospitare il backend `CommonRestApi` su Docker + Gunicorn + Flask + Nginx reverse-proxy HTTPS.
 
 ---
 
@@ -42,7 +42,7 @@ Installa i pacchetti fondamentali per infrastruttura:
 1. Clona il repository `CommonRestApi` da GitHub
 2. Crea virtualenv in `backend/CommonRestApi/venv`
 3. Installa le dipendenze da `requirements.txt`
-   (uso in ambiente di sviluppo non containerizzato)
+4. Crea directory `creds/` e imposta owner corretto
 
 ---
 
@@ -53,24 +53,27 @@ Installa i pacchetti fondamentali per infrastruttura:
 1. Genera `Dockerfile` con:
    - Python 3.12 slim
    - Installazione da `requirements.txt`
-   - Avvio Gunicorn
+   - Avvio Gunicorn con access/error log
 2. Genera `docker-compose.yml` con:
    - Porta `8000:8000`
    - Volume `/logs` persistente
    - Volume `/creds` in sola lettura
 3. Builda e avvia il container Docker `commonrestapi`
 
-**📁 Attenzione:** la directory `creds/` non viene tracciata da Git (è ignorata da `.gitignore`)
-e viene **creata da Docker con owner `root`** se non già presente.
+---
 
-### 🔧 Soluzione:
+## 🌐 FASE 4 – Configurazione Nginx + HTTPS
 
-Esegui sul server backend:
+📄 Script: `bash/a04-nginx-reverse-proxy.sh`
 
-```bash
-mkdir -p ~/backend/CommonRestApi/creds
-sudo chown -R $USER:$USER ~/backend/CommonRestApi/creds
-```
+1. Installa Nginx (se non presente)
+2. Crea certificati self-signed (temporanei) in `certs/selfsigned/`
+3. Crea file `nginx/sites-available/commonrestapi` con reverse proxy:
+   - Porta 443 HTTPS
+   - Proxy verso `http://127.0.0.1:8000`
+4. Abilita la configurazione Nginx
+5. Riavvia Nginx
+
 
 ---
 
@@ -99,6 +102,4 @@ Puoi consultarli direttamente nella directory `backend/CommonRestApi/logs/`.
 
 📌 Prossime fasi (in arrivo):
 - `FASE 10` → Installazione WebSSH con reverse proxy su porta 8443
-- `FASE 20` → Configurazione Nginx + HTTPS con reverse proxy verso Gunicorn
-- `FASE 30` → Monitoraggio + health-check script + log viewer centralizzato
-
+- `FASE 20` → Monitoraggio + health-check script + log viewer centralizzato
