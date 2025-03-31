@@ -67,13 +67,13 @@ services:
       - app-network
 
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
     container_name: nginx-reverse-proxy
     ports:
       - "443:443"
     volumes:
       - ./nginx:/etc/nginx:ro
-      - ./certs/selfsigned:/etc/nginx/certs:ro
+      - ./certs/selfsigned:/etc/ssl/certs:ro
     depends_on:
       - commonrestapi
     restart: unless-stopped
