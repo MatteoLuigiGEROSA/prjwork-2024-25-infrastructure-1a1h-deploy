@@ -72,6 +72,10 @@ services:
     ports:
       - "443:443"
     volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certs/selfsigned:/etc/nginx/certs:ro
+    volumes:
       - ./nginx:/etc/nginx:ro
       - ./certs/selfsigned:/etc/ssl/certs:ro
     depends_on:
