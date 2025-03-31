@@ -43,42 +43,51 @@ Installa i pacchetti fondamentali per infrastruttura:
 2. Crea virtualenv in `backend/CommonRestApi/venv`
 3. Installa le dipendenze da `requirements.txt`
 4. Crea directory `creds/` e assegna ownership a utente corrente
+5. Crea directory `logs/` per log persistenti
+6. Verifica presenza file `requirements.txt` generato da `pipreqs` (o equivalente)
 
 ---
 
 ## 🛡️ FASE 4 – Setup NGINX come reverse proxy (HTTPS in container)
 
-📄 Script: `bash/a03b-nginx-setup.sh`
+📄 Script: `bash/a04-nginx-setup.sh`
 
 1. Crea struttura `nginx/` con:
    - Config principale (`nginx.conf`)
    - Virtual host (`conf.d/commonrestapi.conf`)
 2. Genera certificato self-signed in `certs/selfsigned/`
 3. I file generati verranno montati nel container NGINX
+4. Non avvia container, prepara solo i file
+
+📎 Per dettagli → vedi `docs/nginx.md`
 
 ---
 
 ## 🐳 FASE 5 – Dockerizzazione backend + NGINX (multi-container)
 
-📄 Script: `bash/a03c-dockerize-backend.sh`
+📄 Script: `bash/a05-dockerize-backend.sh`
 
 1. Genera `Dockerfile` per il backend con Flask + Gunicorn
 2. Crea `docker-compose.yml` con:
    - Servizio `commonrestapi` (porta `8000`, volumi `logs/`, `creds/`)
-   - Servizio `nginx-proxy` (porta `443`, volumi `nginx/`, `certs/selfsigned/`)
-   - Rete condivisa tra container
+   - Servizio `nginx-reverse-proxy` (porta `443`, volumi `nginx/`, `certs/selfsigned/`)
+   - Rete condivisa tra container (`app-network`)
 3. Builda ed esegue entrambi i container
+4. Verifica funzionamento con:
+   ```bash
+   curl -k https://localhost/
+   ```
 
 ---
 
 ## 📂 Struttura volumi
 
-| Volume Host                 | Montato in Container | Descrizione                            |
-|----------------------------|----------------------|----------------------------------------|
-| `./logs/`                  | `/logs`              | Log di Gunicorn: accessi + errori      |
-| `./creds/`                 | `/creds` (read-only) | File JSON delle credenziali Firebase   |
-| `./nginx/`                 | `/etc/nginx`         | Configurazione NGINX custom            |
-| `./certs/selfsigned/`      | `/etc/nginx/certs`   | Certificati self-signed per HTTPS      |
+| Volume Host                 | Montato in Container       | Descrizione                            |
+|----------------------------|----------------------------|----------------------------------------|
+| `./logs/`                  | `/logs`                    | Log di Gunicorn: accessi + errori      |
+| `./creds/`                 | `/creds` (read-only)       | File JSON delle credenziali Firebase   |
+| `./nginx/`                 | `/etc/nginx`               | Configurazione NGINX custom            |
+| `./certs/selfsigned/`      | `/etc/nginx/certs`         | Certificati self-signed per HTTPS      |
 
 ---
 
@@ -94,7 +103,9 @@ Installa i pacchetti fondamentali per infrastruttura:
 ---
 
 📌 Prossime fasi (in arrivo):
-- `FASE 6` → Installazione WebSSH con reverse proxy
-- `FASE 7` → HTTPS con Let’s Encrypt
-- `FASE 8` → Monitoraggio + health-check
+
+- `FASE 6` → Installazione WebSSH come container con reverse proxy
+- `FASE 7` → Se possibile, certificati HTTPS reali con Let’s Encrypt + certbot Docker
+- `FASE 8` → Monitoraggio + health-check + script diagnostici
 - `FASE 9` → Deploy frontend Flask (MRA e PAL)
+- `FASE 10` → Backup automatico credenziali + logs

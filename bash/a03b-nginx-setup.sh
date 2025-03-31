@@ -55,8 +55,8 @@ server {
     listen 443 ssl;
     server_name localhost;
 
-    ssl_certificate     /etc/ssl/certs/fullchain.pem;
-    ssl_certificate_key /etc/ssl/certs/privkey.pem;
+    ssl_certificate     /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
 
     location / {
         proxy_pass         http://commonrestapi:8000;
