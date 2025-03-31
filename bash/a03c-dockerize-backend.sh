@@ -8,13 +8,16 @@
 #   Descr.: Crea Dockerfile e docker-compose.yml per multi-container (Flask+Nginx)
 # -----------------------------------------------------------------------------
 
-if [ ! -f "./nginx/conf.d/commonrestapi.conf" ]; then
+APP_DIR="$HOME/backend/CommonRestApi"
+cd "$APP_DIR" || { echo "Errore: directory $APP_DIR non trovata"; exit 1; }
+
+NGINX_DIR="$APP_DIR/nginx"
+CONF_DIR="$NGINX_DIR/conf.d"
+
+if [ ! -f "$CONF_DIR/commonrestapi.conf" ]; then
     echo "ERRORE: NGINX non configurato. Esegui prima lo script preparatorio per la configurazione di NGINX."
     exit 1
 fi
-
-APP_DIR="$HOME/backend/CommonRestApi"
-cd "$APP_DIR" || { echo "Errore: directory $APP_DIR non trovata"; exit 1; }
 
 # Assicura che le directory volumi siano create e accessibili
 mkdir -p creds logs nginx/conf.d certs/selfsigned
